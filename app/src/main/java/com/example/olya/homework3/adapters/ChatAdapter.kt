@@ -1,22 +1,19 @@
 package com.example.olya.homework3.adapters
 
-import android.os.Build.VERSION_CODES.P
 import android.support.v7.widget.RecyclerView
+import android.system.Os.remove
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.example.olya.homework3.R
-import com.example.olya.homework3.R.id.textUser1
 import com.example.olya.homework3.entities.UserMessage
-import kotlinx.android.synthetic.main.item_chat_left.view.*
-import kotlinx.android.synthetic.main.item_chat_right.view.*
-import java.lang.IllegalArgumentException
 
 class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
-        const val VIEW_TYPE_MESSAGE_LEFT = 1;
-        const val VIEW_TYPE_MESSAGE_RIGHT = 2;
+        const val VIEW_TYPE_MESSAGE_LEFT = 1
+        const val VIEW_TYPE_MESSAGE_RIGHT = 2
     }
 
     private val messages: MutableList<UserMessage> = ArrayList()
@@ -55,7 +52,6 @@ class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    // Gets the number of animals in the list
     override fun getItemCount(): Int {
         return messages.size
     }
@@ -74,18 +70,29 @@ class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         notifyItemInserted(messages.size - 1)
     }
 
-    class ViewHolderLeft(view: View) : RecyclerView.ViewHolder(view) {
-        private val textUser1 = view.textUser1
+    fun removeMessage(position: Int) {
+        messages.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    inner abstract class ViewHolderChat(view: View) : RecyclerView.ViewHolder(view), View.OnLongClickListener {
+
+        private val txtMessage : TextView = view.findViewById(R.id.txtMessage)
+
+        init{
+            view.setOnLongClickListener(this)
+        }
 
         fun onBind(message: UserMessage) {
-            textUser1.text = message.text
+            txtMessage.text = message.text
         }
-    }
-    class ViewHolderRight(view: View) : RecyclerView.ViewHolder(view) {
-        private val textUser2 = view.textUser2
 
-        fun onBind(message: UserMessage) {
-            textUser2.text = message.text
+        override fun onLongClick(v: View?): Boolean {
+            removeMessage(adapterPosition)
+            return true
         }
     }
+
+    inner class ViewHolderLeft(view: View) : ViewHolderChat(view)
+    inner class ViewHolderRight(view: View) : ViewHolderChat(view)
 }
