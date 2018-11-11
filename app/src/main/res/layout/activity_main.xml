@@ -6,7 +6,7 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".MainActivity">
+            tools:context=".activities.MainActivity">
 
 
     <LinearLayout
@@ -15,43 +15,45 @@
             android:layout_height="wrap_content">
 
         <EditText
-                android:text="TextView"
+                android:hint="@string/edittext_placeholder"
                 android:layout_width="wrap_content"
                 android:layout_height="64dp"
-                android:id="@+id/textView"
-                android:layout_weight="1"/>
+                android:id="@+id/edit_message"
+                android:layout_weight="2"/>
 
         <Button
                 android:text="@string/button_name"
                 android:layout_width="wrap_content"
                 android:layout_height="64dp"
-                android:id="@+id/button"
+                android:id="@+id/btn_ok"
                 android:layout_weight="1"/>
         <RadioGroup
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/text"
-                android:id="@+id/myRadioGroup"
-                android:checkedButton="@+id/user1">
+                android:layout_height="64dp"
+                android:orientation="horizontal"
+                android:id="@+id/userRadioGroup"
+                android:layout_weight="1"
+                android:checkedButton="@+id/rbtn1">
 
             <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/user1"
+                    android:layout_gravity="center"
+                    android:id="@+id/rbtn1"
                     android:text="User 1"/>
 
             <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/user2"
+                    android:layout_gravity="center"
+                    android:id="@+id/rbtn2"
                     android:text="User 2"/>
-
         </RadioGroup>
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/chatView"
             android:layout_weight="1"/>
-
 </LinearLayout>
