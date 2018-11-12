@@ -1,20 +1,14 @@
 package com.example.olya.homework3.activities
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
-import android.widget.EditText
-import android.widget.RadioGroup
-import android.widget.Toast
 import com.example.olya.homework3.R
-import com.example.olya.homework3.R.id.rbtn1
 import com.example.olya.homework3.adapters.ChatAdapter
 import com.example.olya.homework3.entities.UserMessage
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.header.*
 
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
