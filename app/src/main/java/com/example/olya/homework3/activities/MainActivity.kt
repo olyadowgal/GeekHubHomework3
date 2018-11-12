@@ -14,6 +14,7 @@ import com.example.olya.homework3.R.id.rbtn1
 import com.example.olya.homework3.adapters.ChatAdapter
 import com.example.olya.homework3.entities.UserMessage
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.header.*
 
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -30,7 +31,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_main)
         chatView.layoutManager = LinearLayoutManager(this)
         chatView.adapter = this.chatAdapter
-
         btn_ok.setOnClickListener(this)
     }
 
@@ -42,8 +42,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 val checkedId = userRadioGroup.checkedRadioButtonId
                 if (checkedId == R.id.rbtn1) {
                     val userMessage = UserMessage("User 1", editTextMes)
-                    chatAdapter.add(userMessage)
-
+                        chatAdapter.add(userMessage)
                 }
                 if (checkedId == R.id.rbtn2) {
                     val userMessage = UserMessage("User 2", editTextMes)
