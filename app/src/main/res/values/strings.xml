@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">homework3</string>
     <string name="button_name">OK</string>
+    <string name="edittext_placeholder">Message</string>
+    <string name="enter_message">Enter Message</string>
+    <string name="alert_title">What do you want to with this message?</string>
 </resources>
