@@ -9,6 +9,11 @@ import com.example.olya.homework3.R
 import com.example.olya.homework3.adapters.ChatAdapter
 import com.example.olya.homework3.entities.UserMessage
 import kotlinx.android.synthetic.main.activity_main.*
+import android.support.v7.widget.DividerItemDecoration
+import android.support.v4.content.ContextCompat
+import android.graphics.drawable.Drawable
+
+
 
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -25,6 +30,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_main)
         chatView.layoutManager = LinearLayoutManager(this)
         chatView.adapter = this.chatAdapter
+        val dividerDrawable: Drawable = ContextCompat.getDrawable(this, R.drawable.divider_default)!!
+        chatView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL).apply { setDrawable(dividerDrawable) })
         btn_ok.setOnClickListener(this)
     }
 

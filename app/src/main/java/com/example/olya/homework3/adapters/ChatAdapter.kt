@@ -2,6 +2,7 @@ package com.example.olya.homework3.adapters
 
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -182,7 +183,6 @@ class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         override fun onClick(v: View?) {
             endEdit(editMessage.text.toString())
         }
-
 
         fun onBind(message: UserMessage) {
             editMessage.setText(message.text)
