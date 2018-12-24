@@ -1,16 +1,15 @@
 package com.example.olya.homework3.adapters
 
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.RecyclerView
 import com.example.olya.homework3.R
-import com.example.olya.homework3.R.id.btn_ok
-import com.example.olya.homework3.adapters.ChatAdapter.Companion.HEADER_SIZE
 import com.example.olya.homework3.entities.UserMessage
 
 class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -121,7 +120,7 @@ class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun endEdit(newText: String) {
-        editPosition?.let{
+        editPosition?.let {
             messages[it].text = newText
             notifyItemChanged(it + HEADER_SIZE)
         }
