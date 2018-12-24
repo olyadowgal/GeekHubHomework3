@@ -3,15 +3,13 @@ package com.example.olya.homework3.activities
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.olya.homework3.R
 import com.example.olya.homework3.adapters.ChatAdapter
 import com.example.olya.homework3.entities.UserMessage
 import kotlinx.android.synthetic.main.activity_main.*
-import android.graphics.drawable.Drawable
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
+
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     companion object {
