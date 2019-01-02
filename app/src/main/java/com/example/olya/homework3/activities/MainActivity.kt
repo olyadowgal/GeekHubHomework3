@@ -2,10 +2,13 @@ package com.example.olya.homework3.activities
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.olya.homework3.R
+import com.example.olya.homework3.adapters.ChatAdapter.Companion.HEADER_SIZE
 import com.example.olya.homework3.viewmodels.ChatViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -26,6 +29,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         chatView.layoutManager = LinearLayoutManager(this)
         chatView.adapter = viewModel.chatAdapter
         btn_ok.setOnClickListener(this)
+        viewModel.clickLiveEvent.observe(this, Observer {
+            AlertDialog.Builder(this)
+                .setTitle("What to do with this?")
+                .setNegativeButton("Edit") { _, _ -> viewModel.onEditClicked(it - HEADER_SIZE) }
+                .setPositiveButton("Delete") { _, _ -> viewModel.onDeleteClicked(it - HEADER_SIZE) }
+                .setNeutralButton("Cancel", null)
+                .show()
+        })
     }
 
     override fun onClick(view: View) {

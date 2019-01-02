@@ -1,18 +1,19 @@
 package com.example.olya.homework3.viewmodels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.olya.homework3.R
 import com.example.olya.homework3.adapters.ChatAdapter
 import com.example.olya.homework3.entities.UserMessage
+import com.example.olya.homework3.livedata.SingleLiveEvent
 
-class ChatViewModel : ViewModel() {
+class ChatViewModel : ViewModel(), ChatAdapter.Callback {
 
-    init {
+    val chatAdapter: ChatAdapter = ChatAdapter(this)
+    private val _clickLiveEvent: SingleLiveEvent<Int> = SingleLiveEvent()
+    val clickLiveEvent: LiveData<Int> = _clickLiveEvent
 
-    }
-
-    val chatAdapter: ChatAdapter = ChatAdapter()
 
     fun onSendMessageClicked(checkedRadioButtonId: Int, text: String) {
         when (checkedRadioButtonId) {
@@ -26,6 +27,20 @@ class ChatViewModel : ViewModel() {
             }
         }
     }
+
+    fun onEditClicked (adapterPos: Int) {
+        chatAdapter.startEdit(adapterPos)
+    }
+
+    fun onDeleteClicked (adapterPos: Int) {
+        chatAdapter.removeMessage(adapterPos)
+
+    }
+
+    override fun callbackClickAction(adapterPosition: Int) {
+        _clickLiveEvent.value = adapterPosition
+    }
+
 
 
 }

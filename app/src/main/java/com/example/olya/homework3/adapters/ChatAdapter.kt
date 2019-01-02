@@ -6,12 +6,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.example.olya.homework3.R
 import com.example.olya.homework3.entities.UserMessage
 
-class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ChatAdapter(private val callback: Callback) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         const val HEADER = 0
@@ -24,6 +23,12 @@ class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val messages: MutableList<UserMessage> = ArrayList()
     private var editPosition: Int? = null
+
+    interface Callback {
+
+        fun callbackClickAction(adapterPosition : Int)
+
+    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
@@ -138,13 +143,8 @@ class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             txtMessage.text = message.text
         }
 
-        override fun onLongClick(v: View?): Boolean {
-            AlertDialog.Builder(v!!.context)
-                .setTitle("What to do with this?")
-                .setNegativeButton("Edit") { _, _ -> startEdit(adapterPosition - HEADER_SIZE) }
-                .setPositiveButton("Delete") { _, _ -> removeMessage(adapterPosition - HEADER_SIZE) }
-                .setNeutralButton("Cancel", null)
-                .show()
+        override fun onLongClick(v: View): Boolean {
+            callback.callbackClickAction(adapterPosition)
             return true
         }
     }
