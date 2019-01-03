@@ -1,19 +1,24 @@
 package com.example.olya.homework3.db.daos
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.example.olya.homework3.entities.Message
 
 @Dao
-interface MessageDao{
-    @Query("SELECT * from messages")
-    fun getAllMessages(): LiveData<ArrayList<Message>>
+interface MessageDao {
 
     @Insert
-    fun insert(word: Message)
+    fun insert(message: Message)
 
-    @Query("DELETE FROM messages")
-    fun deleteAll()
+    @Update
+    fun update(message: Message)
+
+    @Delete
+    fun delete(message: Message)
+
+    @Query("SELECT * from messages ORDER BY id ASC")
+    fun selectAllLiveData(): LiveData<List<Message>>
+
+    @Query("SELECT * from messages ORDER BY id ASC")
+    fun selectAll(): List<Message>
 }

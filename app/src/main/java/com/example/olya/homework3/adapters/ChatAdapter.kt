@@ -8,7 +8,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.olya.homework3.R
-import com.example.olya.homework3.entities.UserMessage
+import com.example.olya.homework3.entities.Message
 
 class ChatAdapter(private val callback: Callback) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -21,7 +21,7 @@ class ChatAdapter(private val callback: Callback) : RecyclerView.Adapter<Recycle
         const val VIEW_TYPE_MESSAGE_EDIT = 3
     }
 
-    private val messages: MutableList<UserMessage> = ArrayList()
+    private val messages: MutableList<Message> = ArrayList()
     private var editPosition: Int? = null
 
     interface Callback {
@@ -97,14 +97,18 @@ class ChatAdapter(private val callback: Callback) : RecyclerView.Adapter<Recycle
             HEADER
         } else if (position == editPosition?.let { it + HEADER_SIZE }) {
             return VIEW_TYPE_MESSAGE_EDIT
-        } else when (messages[position - HEADER_SIZE].userName) {
-            "User 1" -> VIEW_TYPE_MESSAGE_LEFT
-            "User 2" -> VIEW_TYPE_MESSAGE_RIGHT
+        } else when (messages[position - HEADER_SIZE].userId) {
+            1 -> VIEW_TYPE_MESSAGE_LEFT
+            2 -> VIEW_TYPE_MESSAGE_RIGHT
             else -> throw IllegalArgumentException()
         }
     }
 
-    fun add(message: UserMessage) {
+    fun setItems(messages: List<Message>) {
+        this.messages.addAll(messages)
+    }
+
+    fun add(message: Message) {
         messages.add(message)
         notifyItemChanged(HEADER_POSITION)
         notifyItemInserted(messages.size)
@@ -125,7 +129,9 @@ class ChatAdapter(private val callback: Callback) : RecyclerView.Adapter<Recycle
 
     fun endEdit(newText: String) {
         editPosition?.let {
-            messages[it].text = newText
+            messages[it] = messages[it].copy(
+                messageText = newText
+            )
             notifyItemChanged(it + HEADER_SIZE)
         }
         editPosition = null
@@ -139,8 +145,8 @@ class ChatAdapter(private val callback: Callback) : RecyclerView.Adapter<Recycle
             view.setOnLongClickListener(this)
         }
 
-        fun onBind(message: UserMessage) {
-            txtMessage.text = message.text
+        fun onBind(message: Message) {
+            txtMessage.text = message.messageText
         }
 
         override fun onLongClick(v: View): Boolean {
@@ -159,9 +165,9 @@ class ChatAdapter(private val callback: Callback) : RecyclerView.Adapter<Recycle
             var user1 = 0
             var user2 = 0
             messages.forEach { i ->
-                when (i.userName) {
-                    "User 1" -> user1++
-                    "User 2" -> user2++
+                when (i.userId) {
+                    1 -> user1++
+                    2 -> user2++
                 }
             }
             txtMessage.text = "User 1 : $user1   User 2 : $user2"
@@ -182,8 +188,8 @@ class ChatAdapter(private val callback: Callback) : RecyclerView.Adapter<Recycle
         }
 
 
-        fun onBind(message: UserMessage) {
-            editMessage.setText(message.text)
+        fun onBind(message: Message) {
+            editMessage.setText(message.messageText)
         }
 
     }
