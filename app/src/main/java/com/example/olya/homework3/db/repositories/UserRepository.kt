@@ -15,7 +15,7 @@ class UserRepository(db: ChatDatabase) : BaseRepository() {
     @WorkerThread
     fun insert(user: User) = userDao.insert(user)
 
-    fun insertAsync(user: User, callback: () -> Unit = {}) = executor.execute {
+    fun insertAsync(user: User, callback: () -> Unit = {}) = asyncExecutor.execute {
         insert(user)
         callback()
     }

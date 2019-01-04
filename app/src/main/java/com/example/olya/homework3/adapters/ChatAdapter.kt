@@ -21,26 +21,45 @@ class ChatAdapter(private val callback: Callback) : RecyclerView.Adapter<Recycle
         const val VIEW_TYPE_MESSAGE_EDIT = 3
     }
 
-    private val messages: MutableList<Message> = ArrayList()
-    private var editPosition: Int? = null
+    private val _messages: MutableList<Message> = ArrayList()
+    val messages: List<Message> = _messages
+
+    var editPosition: Int? = null
+        set(value) {
+            val prev = field
+            field = value
+            prev?.let { notifyItemChanged(toAdapterPosition(it)) }
+            value?.let { notifyItemChanged(toAdapterPosition(it)) }
+        }
 
     interface Callback {
 
-        fun callbackClickAction(adapterPosition : Int)
+        fun onItemLongClicked(position: Int)
+        fun onEditFinished(position: Int, text: String)
+
 
     }
+
+    fun toItemsPosition(position: Int): Int {
+        return position - HEADER_SIZE
+    }
+
+    fun toAdapterPosition(position: Int): Int {
+        return position + HEADER_SIZE
+    }
+
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ViewHolderHeader -> holder.onBind()
             is ViewHolderEdit -> {
-                holder.onBind(messages[position - HEADER_SIZE])
+                holder.onBind(_messages[toItemsPosition(position)])
             }
             is ViewHolderLeft -> {
-                holder.onBind(messages[position - HEADER_SIZE])
+                holder.onBind(_messages[toItemsPosition(position)])
             }
             is ViewHolderRight -> {
-                holder.onBind(messages[position - HEADER_SIZE])
+                holder.onBind(_messages[toItemsPosition(position)])
             }
         }
 
@@ -89,7 +108,7 @@ class ChatAdapter(private val callback: Callback) : RecyclerView.Adapter<Recycle
     }
 
     override fun getItemCount(): Int {
-        return messages.size + HEADER_SIZE
+        return _messages.size + HEADER_SIZE
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -97,7 +116,7 @@ class ChatAdapter(private val callback: Callback) : RecyclerView.Adapter<Recycle
             HEADER
         } else if (position == editPosition?.let { it + HEADER_SIZE }) {
             return VIEW_TYPE_MESSAGE_EDIT
-        } else when (messages[position - HEADER_SIZE].userId) {
+        } else when (_messages[toItemsPosition(position)].userId) {
             1 -> VIEW_TYPE_MESSAGE_LEFT
             2 -> VIEW_TYPE_MESSAGE_RIGHT
             else -> throw IllegalArgumentException()
@@ -105,36 +124,26 @@ class ChatAdapter(private val callback: Callback) : RecyclerView.Adapter<Recycle
     }
 
     fun setItems(messages: List<Message>) {
-        this.messages.addAll(messages)
+        this._messages.addAll(messages)
     }
 
     fun add(message: Message) {
-        messages.add(message)
+        _messages.add(message)
         notifyItemChanged(HEADER_POSITION)
-        notifyItemInserted(messages.size)
+        notifyItemInserted(_messages.size)
     }
 
     fun removeMessage(position: Int) {
-        messages.removeAt(position)
+        _messages.removeAt(position)
         notifyItemChanged(HEADER_POSITION)
-        notifyItemRemoved(position + HEADER_SIZE)
+        notifyItemRemoved(toAdapterPosition(position))
     }
 
-    fun startEdit(position: Int) {
-        val prevEditPosition = editPosition
-        editPosition = position
-        prevEditPosition?.let { notifyItemChanged(it + HEADER_SIZE) }
-        notifyItemChanged(position + HEADER_SIZE)
-    }
-
-    fun endEdit(newText: String) {
-        editPosition?.let {
-            messages[it] = messages[it].copy(
-                messageText = newText
-            )
-            notifyItemChanged(it + HEADER_SIZE)
+    fun setMessage(position: Int, message: Message, notify: Boolean = true) {
+        _messages[position] = message
+        if (notify) {
+            notifyItemChanged(toAdapterPosition(position))
         }
-        editPosition = null
     }
 
     abstract inner class ViewHolderChat(view: View) : RecyclerView.ViewHolder(view), View.OnLongClickListener {
@@ -150,7 +159,7 @@ class ChatAdapter(private val callback: Callback) : RecyclerView.Adapter<Recycle
         }
 
         override fun onLongClick(v: View): Boolean {
-            callback.callbackClickAction(adapterPosition)
+            callback.onItemLongClicked(toItemsPosition(adapterPosition))
             return true
         }
     }
@@ -164,7 +173,7 @@ class ChatAdapter(private val callback: Callback) : RecyclerView.Adapter<Recycle
         fun onBind() {
             var user1 = 0
             var user2 = 0
-            messages.forEach { i ->
+            _messages.forEach { i ->
                 when (i.userId) {
                     1 -> user1++
                     2 -> user2++
@@ -184,7 +193,10 @@ class ChatAdapter(private val callback: Callback) : RecyclerView.Adapter<Recycle
         }
 
         override fun onClick(v: View?) {
-            endEdit(editMessage.text.toString())
+            callback.onEditFinished(
+                toItemsPosition(adapterPosition),
+                editMessage.text.toString()
+            )
         }
 
 

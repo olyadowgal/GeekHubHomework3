@@ -32,8 +32,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         viewModel.clickLiveEvent.observe(this, Observer {
             AlertDialog.Builder(this)
                 .setTitle("What to do with this?")
-                .setNegativeButton("Edit") { _, _ -> viewModel.onEditClicked(it - HEADER_SIZE) }
-                .setPositiveButton("Delete") { _, _ -> viewModel.onDeleteClicked(it - HEADER_SIZE) }
+                .setNegativeButton("Edit") { _, _ -> viewModel.onEditClicked(it) }
+                .setPositiveButton("Delete") { _, _ -> viewModel.onDeleteClicked(it) }
                 .setNeutralButton("Cancel", null)
                 .show()
         })

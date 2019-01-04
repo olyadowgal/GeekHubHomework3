@@ -36,18 +36,38 @@ class ChatViewModel : ViewModel(), ChatAdapter.Callback {
         }
     }
 
-    fun onEditClicked(adapterPos: Int) {
-        chatAdapter.startEdit(adapterPos)
+    //region Dialog
+
+    fun onEditClicked(position: Int) {
+        chatAdapter.editPosition = position
     }
 
-    fun onDeleteClicked(adapterPos: Int) {
-        chatAdapter.removeMessage(adapterPos)
+    fun onDeleteClicked(position: Int) {
+        val message = chatAdapter.messages[position]
+        messageRepository.deleteAsync(message) {
+            chatAdapter.removeMessage(position)
+        }
 
     }
+    //endregion
 
-    override fun callbackClickAction(adapterPosition: Int) {
-        _clickLiveEvent.value = adapterPosition
+    //region Adapter.Callback
+
+    override fun onItemLongClicked(position: Int) {
+        _clickLiveEvent.value = position
     }
+
+    override fun onEditFinished(position: Int, text: String) {
+        val newMessage = chatAdapter.messages[position].copy(
+            messageText = text
+        )
+        messageRepository.updateAsync(newMessage) {
+            chatAdapter.setMessage(position,newMessage)
+            chatAdapter.editPosition = null
+        }
+
+    }
+    //endregion
 
 
 }

@@ -11,8 +11,12 @@ import com.example.olya.homework3.db.daos.UserDao
 import com.example.olya.homework3.entities.Message
 import com.example.olya.homework3.entities.User
 
-@Database(entities = [User::class, Message::class], version = 1)
+@Database(
+    entities = [User::class, Message::class],
+    version = 1
+)
 abstract class ChatDatabase : RoomDatabase() {
+
     abstract fun userDao(): UserDao
     abstract fun messageDao(): MessageDao
 
@@ -28,8 +32,8 @@ abstract class ChatDatabase : RoomDatabase() {
         private fun buildDatabase(context: Context) =
             Room.databaseBuilder(
                 context.applicationContext,
-                ChatDatabase::class.java, "chatter.db"
-            )
+                ChatDatabase::class.java, "chat.db"
+        )
                 .addCallback(chatCallback)
                 .build()
 
